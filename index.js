@@ -14,8 +14,8 @@ Go code!
 */
 
 const express = require("express");
-// const projectRouter = require("./projects/project-router");
-// const actionRouter = require("./actions/action-router");
+const projectRouter = require("./projects/project-router");
+const actionRouter = require("./actions/action-router");
 const welcomeRouter = require("./welcome/welcome-router");
 
 const server = express();
@@ -25,8 +25,8 @@ server.use(express.json());
 
 // setting up routes
 server.use("/", welcomeRouter);
-// server.use("/projects", projectRouter);
-// server.use("/projects/:id/actions", actionRouter);
+server.use("/projects", projectRouter);
+server.use("/projects/:id/actions", actionRouter);
 
 server.listen(port, () => {
   console.log(`Server listening at http://localhost${port}`);
