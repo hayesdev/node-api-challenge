@@ -12,6 +12,11 @@ const router = express.Router();
 
 // GET action by id
 router.get("/:actionId", (req, res) => {
+  if (!req.params.id) {
+    return res.status(404).json({
+      message: "That action does not exist.",
+    });
+  }
   actions
     .get(req.params.actionId)
     .then((id) => {
@@ -59,7 +64,7 @@ router.post("/:actionId", (req, res) => {
     });
 });
 
-// PUT edit project
+// PUT edit action
 router.put("/:actionId", (req, res) => {
   if (!req.params.actionId || !req.body) {
     return res.status(404).json({
