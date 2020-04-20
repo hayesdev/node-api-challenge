@@ -10,4 +10,25 @@ router.get("/", (req, res) => {
   });
 });
 
+// GET action by id
+router.get("/:projectId", (req, res) => {
+  actions
+    .get(req.params.projectId)
+    .then((id) => {
+      if (id) {
+        res.status(200).json(id);
+      } else {
+        res.status(404).json({
+          message: "That action does not exist.",
+        });
+      }
+    })
+    .catch((err) => {
+      console.logg(err);
+      res.status(500).json({
+        error: "There was an error retrieving that project's actions.",
+      });
+    });
+});
+
 module.exports = router;
