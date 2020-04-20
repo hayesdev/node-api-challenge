@@ -10,6 +10,21 @@ const router = express.Router();
 //   });
 // });
 
+// GET get all projects
+// router.get("/", (req, res)=> {
+//     projects
+//     .get()
+//     .then((projects)=>{
+//         res.status(200).json(projects)
+//     })
+//     .catch((err)=>{
+//         console.log(err);
+//         res.status(500).json({
+//             error: "Error retrieving projects."
+//         })
+//     })
+// });
+
 // GET by id
 router.get("/:id", (req, res) => {
   projects
@@ -31,7 +46,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-// POST create new project
+// POST new project
 router.post("/", (req, res) => {
   if (!req.body.name || !req.body.description) {
     res.status(400).json({
@@ -56,13 +71,51 @@ router.post("/", (req, res) => {
 });
 
 // PUT edit project
-// router.put("/:id", (req, res) => {
-//   if (!req.params.id) {
-//     res.status(404).json({
-//       message: "That project ID does not exist",
-//     });
-//   }
-//   projects.update();
-// });
+router.put("/:id", (req, res) => {
+  if (!req.params.id || !req.body) {
+    res.status(404).json({
+      message: "That project ID does not exist",
+    });
+  }
+  projects
+    .update(req.params.id, req.body)
+    .then((changes) => {
+      if (changes) {
+        res.status(201).json({
+          message: "Project updated!",
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: "Could not update that project.",
+      });
+    });
+});
+
+// DELETE
+router.delete("/:id", (req, res) => {
+  //   if (!req.params.id) {
+  //     res.status(404).json({
+  //       message: "That project does not exist",
+  //     });
+  //   }
+  projects
+    .remove(req.params.id)
+    .then((project) => {
+      if (project > 0) {
+        res.status(200).json({
+          message: "Project has been removed.",
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: "Error removing the project.",
+      });
+    });
+});
 
 module.exports = router;
